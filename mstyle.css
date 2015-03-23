@@ -1,0 +1,35 @@
+.maciek_chosen {
+	background-color: 'red';
+	border-style: outset;
+	border-width: medium;
+	border-color:red green blue yellow;
+	-webkit-filter: blur(2px) hue-rotate(120deg);
+}
+
+#maciek_text_area {
+	font-size: large;
+	width: 50%;
+	margin: 0px 20px;
+	height: 50px;
+	padding : 5px;
+}
+
+#maciek_result {
+	font-size: large;
+	margin: 20px;
+	width: 80%;
+
+}
+
+#maciek_button {
+	font-size: large;
+	margin: 0 20px;
+	height: 50px;
+	padding: 10px 20px;
+	text-align: center; 
+	vertical-align: top;
+}
+
+.error {
+	color: red;
+}
