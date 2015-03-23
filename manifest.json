@@ -17,7 +17,7 @@
   "permissions": [
     "background",
     "tabs",
-    "http://www.msn.com/*",
-    "https://www.msn.com/*"  
+    "http://*/*",
+    "https://**"  
   ]
 }
