@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "version": 1,
   "name": "Fighting the xpath",
-  "description": "This extension should highlight the elements that matc xpath",
+  "description": "This extension should highlight the elements that match xpath",
   "version": "1.0",
   "background": {
     "scripts": ["background.js"]
@@ -11,6 +11,9 @@
   "browser_action": {
     "default_icon": "icon.png"
   },
+  "web_accessible_resources": 
+    ["inserted.html"]
+  ,
   "permissions": [
     "background",
     "tabs",

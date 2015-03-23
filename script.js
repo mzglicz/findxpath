@@ -5,6 +5,7 @@ function create(htmlStr) {
     while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
+    console.log(frag);
     return frag;
 }
 
@@ -33,13 +34,7 @@ function removeClass( classname, element ) {
 
 function buttonClicked() {
 	var mclass = 'maciek_chosen';
-	var previous_elements = document.getElementsByClassName(mclass);
-	if (previous_elements) {
-		for (var i in previous_elements) {
-			removeClass(mclass, previous_elements[i]);
-		}
-	}
-
+	clearEffect(mclass);
 	var xpathExpression = document.getElementById('maciek_text_area').value;
 	if (!xpathExpression || xpathExpression === "") {
 		alert("Search area cannot be null");
@@ -60,7 +55,47 @@ function buttonClicked() {
 	}
 }
 
-var fragment = create('<p><br><br><br><br><br></p><div id="maciek_container"><textarea id="maciek_text_area"></textarea><button id="maciek_button">Search</button></div><p id="maciek_result"></p>');
-// You can use native DOM methods to insert the fragment:
-document.body.insertBefore(fragment, document.body.childNodes[0]);
-document.getElementById('maciek_button').addEventListener("click", buttonClicked);
+function clearEffect(className) {
+	var previousElements = document.getElementsByClassName(className);
+	if (previousElements) {
+		for (var i in previousElements) {
+			removeClass(className, previousElements[i]);
+		}
+	}
+}
+
+// TODO pass an error and make the callback handle it
+function loadFile(filePath, callback) {
+	var xmlHttp = null;
+	xmlHttp = new XMLHttpRequest();
+	xmlHttp.open( "GET", filePath, true );
+	xmlHttp.onreadystatechange = function(event) {
+	if (xmlHttp.readyState == 4) {
+     if(xmlHttp.status == 200) {
+     	callback(xmlHttp.responseText);
+     }
+     else {
+       console.log("Failed to load " + filePath);
+     }
+  	} else {
+  		console.log("Wrong readyState");
+  	}
+  }
+  xmlHttp.send( null );
+}
+
+
+loadFile(chrome.extension.getURL ("inserted.html"), function(content) {
+		if (!document.getElementById('maciek_search_button')) {
+			var fragment = create(content);
+     		document.body.insertBefore(fragment, document.body.childNodes[0]);
+			document.getElementById('maciek_search_button').addEventListener("click", buttonClicked);
+			document.getElementById('maciek_clear_button').addEventListener("click", function() {
+				clearEffect('maciek_chosen')
+				document.getElementById('maciek_result').innerHTML = "";
+				document.getElementById('maciek_text_area').value = "";
+			});
+		}
+});
+
+
