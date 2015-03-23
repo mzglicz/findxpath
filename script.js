@@ -32,10 +32,20 @@ function removeClass( classname, element ) {
     element.className = cn;
 }
 
+function getXpathExpression(elementId) {
+	var xpathExpression = document.getElementById('maciek_text_area').value;
+	if (!xpathExpression || xpathExpression === "") {
+		alert("Search area cannot be null");
+		return null;
+	} else {
+		return xpathExpression.trim();
+	}
+}
+
 function buttonClicked() {
 	var mclass = 'maciek_chosen';
 	clearEffect(mclass);
-	var xpathExpression = document.getElementById('maciek_text_area').value;
+	var xpathExpression = getXpathExpression('maciek_text_area');
 	if (!xpathExpression || xpathExpression === "") {
 		alert("Search area cannot be null");
 		return;
@@ -44,7 +54,6 @@ function buttonClicked() {
 		var nodesSnapshot = document.evaluate(xpathExpression, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null );
 		document.getElementById('maciek_result').innerHTML = "Found elements: " + nodesSnapshot.snapshotLength;
 		for ( var i=0 ; i < nodesSnapshot.snapshotLength; i++ ) {
-  				console.log( nodesSnapshot.snapshotItem(i).textContent );
 				addClass(mclass, nodesSnapshot.snapshotItem(i));
 		}
 		removeClass('error', document.getElementById('maciek_result'));
@@ -57,10 +66,13 @@ function buttonClicked() {
 
 function clearEffect(className) {
 	var previousElements = document.getElementsByClassName(className);
-	if (previousElements) {
+	if (previousElements && previousElements.length > 0) {
+		console.log("Number of elements to fix" + previousElements.length);
 		for (var i in previousElements) {
 			removeClass(className, previousElements[i]);
 		}
+		// we make recursive calls
+		clearEffect(className);
 	}
 }
 
@@ -81,9 +93,8 @@ function loadFile(filePath, callback) {
   		console.log("Wrong readyState");
   	}
   }
-  xmlHttp.send( null );
+  xmlHttp.send(null);
 }
-
 
 loadFile(chrome.extension.getURL ("inserted.html"), function(content) {
 		if (!document.getElementById('maciek_search_button')) {
